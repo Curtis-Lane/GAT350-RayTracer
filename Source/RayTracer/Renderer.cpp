@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Canvas.h"
+
 bool Renderer::Initialize() {
 	if(SDL_Init(SDL_INIT_VIDEO) != 0) {
 		std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
@@ -37,4 +39,11 @@ bool Renderer::CreateWindow(const std::string& title, int width, int height) {
 	}
 	
 	return true;
+}
+
+void Renderer::PresentCanvas(const Canvas& canvas) {
+	// Copy canvas texture to renderer
+	SDL_RenderCopy(this->renderer, canvas.texture, NULL, NULL);
+	// Present renderer to screen
+	SDL_RenderPresent(this->renderer);
 }

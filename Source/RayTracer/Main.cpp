@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Renderer.h"
+#include "Canvas.h"
 #include "Random.h"
 
 int main(int argc, char* argv[]) {
@@ -12,6 +13,8 @@ int main(int argc, char* argv[]) {
 	renderer.Initialize();
 	renderer.CreateWindow("GAT350-RayTracing", 400, 300);
 
+	Canvas canvas = Canvas(400, 300, renderer);
+
 	bool quit = false;
 	while(!quit) {
 		SDL_Event event;
@@ -21,6 +24,14 @@ int main(int argc, char* argv[]) {
 				quit = true;
 				break;
 		}
+
+		canvas.Clear(color4_t(0, 0, 0, 1));
+		for(int i = 0; i < 1000; i++) {
+			canvas.DrawPoint(glm::ivec2((int) random(0, 400), (int) random(0, 300)), color4_t(random01(), random01(), random01(), random01()));
+		}
+		canvas.Update();
+
+		renderer.PresentCanvas(canvas);
 	}
 
 	renderer.Shutdown();
