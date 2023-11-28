@@ -171,6 +171,7 @@
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Renderer.h" />
   </ItemGroup>
