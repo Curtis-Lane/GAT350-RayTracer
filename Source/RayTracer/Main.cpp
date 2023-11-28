@@ -1,9 +1,12 @@
 #include <iostream>
 
 #include "Renderer.h"
+#include "Random.h"
 
 int main(int argc, char* argv[]) {
 	std::cout << "Hello World!" << std::endl;
+
+	seedRandom(static_cast<unsigned int>(time(nullptr)));
 
 	Renderer renderer;
 	renderer.Initialize();
