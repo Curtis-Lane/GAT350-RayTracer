@@ -6,7 +6,7 @@
 
 Canvas::Canvas(int width, int height, const Renderer& renderer) {
 	this->size = glm::ivec2(width, height);
-	this->texture = SDL_CreateTexture(renderer.renderer, ColorToRGBA(color4_t(1)), SDL_TEXTUREACCESS_STREAMING, width, height);
+	this->texture = SDL_CreateTexture(renderer.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, width, height);
 	this->buffer.resize(width * height);
 }
 
@@ -17,7 +17,7 @@ Canvas::~Canvas() {
 }
 
 void Canvas::Update() {
-	SDL_UpdateTexture(this->texture, NULL, this->buffer.data(), this->size.x); // TODO: AAAAAAAAAA
+	SDL_UpdateTexture(this->texture, NULL, this->buffer.data(), this->size.x * sizeof(rgba_t));
 }
 
 void Canvas::Clear(const color4_t& color) {
