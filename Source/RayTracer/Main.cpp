@@ -3,6 +3,7 @@
 #include "Renderer.h"
 #include "Canvas.h"
 #include "Random.h"
+#include "Scene.h"
 
 int main(int argc, char* argv[]) {
 	std::cout << "Hello World!" << std::endl;
@@ -14,6 +15,12 @@ int main(int argc, char* argv[]) {
 	renderer.CreateWindow("GAT350-RayTracing", 400, 300);
 
 	Canvas canvas = Canvas(400, 300, renderer);
+
+	float aspectRatio = canvas.GetSize().x / (float) canvas.GetSize().y;
+	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), 70.0f, aspectRatio);
+
+	Scene scene; // Sky color could be set with the top and bottom color
+	scene.SetCamera(camera);
 
 	bool quit = false;
 	while(!quit) {
@@ -33,9 +40,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		canvas.Clear(color4_t(0, 0, 0, 1));
-		for(int i = 0; i < 10000; i++) {
-			canvas.DrawPoint(glm::ivec2((int) random(0, canvas.GetSize().x), (int) random(0, canvas.GetSize().y)), color4_t(random01(), random01(), random01(), 1));
-		}
+		scene.Render(canvas);
 		canvas.Update();
 
 		renderer.PresentCanvas(canvas);
