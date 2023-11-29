@@ -23,11 +23,18 @@ int main(int argc, char* argv[]) {
 			case SDL_QUIT:
 				quit = true;
 				break;
+			case SDL_KEYDOWN:
+				switch(event.key.keysym.sym) {
+					case SDLK_ESCAPE:
+						quit = true;
+						break;
+				}
+				break;
 		}
 
 		canvas.Clear(color4_t(0, 0, 0, 1));
-		for(int i = 0; i < 1000; i++) {
-			canvas.DrawPoint(glm::ivec2((int) random(0, 400), (int) random(0, 300)), color4_t(random01(), random01(), random01(), random01()));
+		for(int i = 0; i < 10000; i++) {
+			canvas.DrawPoint(glm::ivec2((int) random(0, canvas.GetSize().x), (int) random(0, canvas.GetSize().y)), color4_t(random01(), random01(), random01(), 1));
 		}
 		canvas.Update();
 
