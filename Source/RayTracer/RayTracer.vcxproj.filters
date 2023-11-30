@@ -48,5 +48,11 @@
     <ClInclude Include="Scene.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

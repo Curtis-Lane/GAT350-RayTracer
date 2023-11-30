@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Renderer.h"
+#include "Material.h"
 #include "Canvas.h"
 #include "Random.h"
 #include "Scene.h"
@@ -21,6 +22,9 @@ int main(int argc, char* argv[]) {
 
 	Scene scene; // Sky color could be set with the top and bottom color
 	scene.SetCamera(camera);
+
+	// Create material
+	std::shared_ptr<Lambertian> material = std::make_shared<Lambertian>(color3_t(1, 0, 0));
 
 	bool quit = false;
 	while(!quit) {

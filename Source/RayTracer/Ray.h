@@ -14,3 +14,16 @@ struct ray_t {
 	glm::vec3 origin;
 	glm::vec3 direction;
 };
+
+struct raycastHit_t {
+	// Distance along the ray direction, from the origin to the hit point
+	float distance = 0.0f;
+
+	// World point of raycast hit
+	glm::vec3 point = glm::vec3(0);
+	// Surface normal of raycast hit
+	glm::vec3 normal = glm::vec3(0);
+
+	// Material attached to hit object
+	class Material* material = nullptr;
+};
