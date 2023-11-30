@@ -4,6 +4,7 @@
 #include "Material.h"
 #include "Canvas.h"
 #include "Random.h"
+#include "Sphere.h"
 #include "Scene.h"
 
 int main(int argc, char* argv[]) {
@@ -25,6 +26,12 @@ int main(int argc, char* argv[]) {
 
 	// Create material
 	std::shared_ptr<Lambertian> material = std::make_shared<Lambertian>(color3_t(1, 0, 0));
+
+	// Create objects -> add to scene
+	for(int i = 0; i < 10; i++) {
+		std::unique_ptr<Sphere> sphere = std::make_unique<Sphere>(glm::vec3(random(-2, 2), random(-2, 2), random(-5, -2)), random(0.25f, 1), material);
+		scene.AddObject(std::move(sphere));
+	}
 
 	bool quit = false;
 	while(!quit) {
