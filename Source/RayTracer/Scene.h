@@ -15,7 +15,7 @@ class Scene {
 			this->bottomColor = bottomColor;
 		}
 
-		void Render(class Canvas& canvas);
+		void Render(class Canvas& canvas, int numSamples);
 		color3_t Trace(const ray_t& ray, float minDistance, float maxDistance, raycastHit_t& raycastHit);
 		void AddObject(std::unique_ptr<Object> object) {this->objects.push_back(std::move(object));}
 
@@ -25,6 +25,6 @@ class Scene {
 		std::vector<std::unique_ptr<Object>> objects;
 		std::shared_ptr<Camera> camera;
 
-		color3_t topColor = color3_t(0);
-		color3_t bottomColor = color3_t(1);
+		color3_t topColor = color3_t(1);
+		color3_t bottomColor = color3_t(0);
 };

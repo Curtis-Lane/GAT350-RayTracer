@@ -33,6 +33,11 @@ int main(int argc, char* argv[]) {
 		scene.AddObject(std::move(sphere));
 	}
 
+	// Render scene
+	canvas.Clear(color4_t(0, 0, 0, 1));
+	scene.Render(canvas, 50);
+	canvas.Update();
+
 	bool quit = false;
 	while(!quit) {
 		SDL_Event event;
@@ -49,10 +54,6 @@ int main(int argc, char* argv[]) {
 				}
 				break;
 		}
-
-		canvas.Clear(color4_t(0, 0, 0, 1));
-		scene.Render(canvas);
-		canvas.Update();
 
 		renderer.PresentCanvas(canvas);
 	}

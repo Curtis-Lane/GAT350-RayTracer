@@ -3,26 +3,36 @@
 #include "MathUtils.h"
 #include "Canvas.h"
 
-void Scene::Render(Canvas& canvas) {
+void Scene::Render(Canvas& canvas, int numSamples) {
 	// Cast ray for each point (pixel) on the canvas
 	for(int y = 0; y < canvas.GetSize().y; y++) {
 		for(int x = 0; x < canvas.GetSize().x; x++) {
 			// Create vec2 pixel from canvas x, y
 			glm::vec2 pixel = glm::vec2(x, y);
-			// Get normalized (0 - 1) point coordinates from pixel
-			glm::vec2 point = pixel / (glm::vec2) canvas.GetSize();
-			// Flip y
-			point.y = 1.0f - point.y;
 
-			// Create ray from camera
-			ray_t ray = camera->GetRay(point);
+			// Set initial color
+			color3_t color = color3_t(0);
+			// Cast a ray for each sample, accumulate color value for each sample
+			// Each ray will have a random offset
+			for(int i = 0; i < numSamples; i++) {
+				// Get normalized (0 - 1) point coordinates from pixel
+				// Add random x and y offset (0-1) to each pixel
+				glm::vec2 point = (pixel + glm::vec2(random01(), random01())) / (glm::vec2) canvas.GetSize();
+				// Flip y
+				point.y = 1.0f - point.y;
 
-			// Cast ray into scene
-			// Set color value from trace
-			raycastHit_t raycastHit;
-			color3_t color = Trace(ray, 0, 100, raycastHit);
+				// Create ray from camera
+				ray_t ray = camera->GetRay(point);
+
+				// Cast ray into scene
+				// Add color value from trace
+				raycastHit_t raycastHit;
+				color += Trace(ray, 0, 100, raycastHit);
+			}
 
 			// Draw color to canvas point (pixel)
+			// Get average color (average = (color + color + color) / number of samples)
+			color /= numSamples;
 			canvas.DrawPoint(pixel, color4_t(color, 1));
 		}
 	}
@@ -47,6 +57,7 @@ color3_t Scene::Trace(const ray_t& ray, float minDistance, float maxDistance, ra
 		ray_t scattered;
 		color3_t color;
 
+		// Check if maximum depth (number of bounces) is reached, get color from material and scattered ray
 		if(raycastHit.material->Scatter(ray, raycastHit, color, scattered)) {
 			return raycastHit.normal;
 		} else {
