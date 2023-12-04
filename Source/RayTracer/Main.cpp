@@ -25,10 +25,12 @@ int main(int argc, char* argv[]) {
 	scene.SetCamera(camera);
 
 	// Create material
-	std::shared_ptr<Lambertian> material = std::make_shared<Lambertian>(color3_t(1, 0, 0));
+	std::shared_ptr<Lambertian> lambertian = std::make_shared<Lambertian>(color3_t(0, 0, 1));
+	std::shared_ptr<Metal> metal = std::make_shared<Metal>(color3_t(1, 1, 1), 0.0f);
 
 	// Create objects -> add to scene
 	for(int i = 0; i < 10; i++) {
+		auto material = (rand() % 2 == 0) ? std::dynamic_pointer_cast<Material>(lambertian) : std::dynamic_pointer_cast<Material>(metal);
 		std::unique_ptr<Sphere> sphere = std::make_unique<Sphere>(glm::vec3(random(-2, 2), random(-2, 2), random(-5, -2)), random(0.25f, 1), material);
 		scene.AddObject(std::move(sphere));
 	}

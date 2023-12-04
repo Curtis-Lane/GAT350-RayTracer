@@ -18,3 +18,7 @@ inline glm::vec3 cross(const glm::vec3& v1, const glm::vec3& v2) {
 		v1.x * v2.y - v1.y * v2.x
 	);
 }
+
+inline glm::vec3 reflect(const glm::vec3 v, const glm::vec3 n) {
+	return v - 2.0f * dot(n, v) * n;
+}

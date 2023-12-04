@@ -1,6 +1,7 @@
 #include "Scene.h"
 
 #include "MathUtils.h"
+#include "Random.h"
 #include "Canvas.h"
 
 void Scene::Render(Canvas& canvas, int numSamples) {
