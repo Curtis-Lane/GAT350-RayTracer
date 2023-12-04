@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 	float aspectRatio = canvas.GetSize().x / (float) canvas.GetSize().y;
 	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), 70.0f, aspectRatio);
 
-	Scene scene; // Sky color could be set with the top and bottom color
+	Scene scene(20); // Sky color could be set with the top and bottom color
 	scene.SetCamera(camera);
 
 	// Create material

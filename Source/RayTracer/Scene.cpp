@@ -27,7 +27,7 @@ void Scene::Render(Canvas& canvas, int numSamples) {
 				// Cast ray into scene
 				// Add color value from trace
 				raycastHit_t raycastHit;
-				color += Trace(ray, 0, 100, raycastHit);
+				color += Trace(ray, 0, 100, raycastHit, this->depth);
 			}
 
 			// Draw color to canvas point (pixel)
@@ -38,7 +38,7 @@ void Scene::Render(Canvas& canvas, int numSamples) {
 	}
 }
 
-color3_t Scene::Trace(const ray_t& ray, float minDistance, float maxDistance, raycastHit_t& raycastHit) {
+color3_t Scene::Trace(const ray_t& ray, float minDistance, float maxDistance, raycastHit_t& raycastHit, int depth) {
 	bool rayHit = false;
 	float closestDistance = maxDistance;
 
@@ -58,13 +58,15 @@ color3_t Scene::Trace(const ray_t& ray, float minDistance, float maxDistance, ra
 		color3_t color;
 
 		// Check if maximum depth (number of bounces) is reached, get color from material and scattered ray
-		if(raycastHit.material->Scatter(ray, raycastHit, color, scattered)) {
-			return raycastHit.normal;
+		if(depth > 0 && raycastHit.material->Scatter(ray, raycastHit, color, scattered)) {
+			// Recursive function, call self and modulate (multiply) colors of depth bounces
+			return color * Trace(scattered, minDistance, maxDistance, raycastHit, depth - 1);
 		} else {
+			// Reached maximum depth of bounces (color is black)
 			return color3_t(0);
 		}
 	}
-
+	
 	// If ray didn't hit, return scene sky color
 	glm::vec3 direction = glm::normalize(ray.direction);
 	float t = (direction.y + 1) * 0.5f; // direction.y (-1 <-> 1) => (0 <-> 1)
