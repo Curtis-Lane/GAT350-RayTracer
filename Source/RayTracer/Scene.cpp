@@ -63,8 +63,8 @@ color3_t Scene::Trace(const ray_t& ray, float minDistance, float maxDistance, ra
 			// Recursive function, call self and modulate (multiply) colors of depth bounces
 			return color * Trace(scattered, minDistance, maxDistance, raycastHit, depth - 1);
 		} else {
-			// Reached maximum depth of bounces (color is black)
-			return color3_t(0);
+			// Reached maximum depth of bounces (get emissive color, will be black except for Emissive materials)
+			return raycastHit.material->GetEmissive();
 		}
 	}
 	
