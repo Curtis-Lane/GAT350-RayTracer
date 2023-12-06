@@ -21,9 +21,9 @@ int main(int argc, char* argv[]) {
 	Canvas canvas = Canvas(400, 300, renderer);
 
 	float aspectRatio = canvas.GetSize().x / (float) canvas.GetSize().y;
-	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(0, 1, 8), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), 70.0f, aspectRatio);
+	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(0, 1, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), 20.0f, aspectRatio);
 
-	Scene scene(20); // Sky color could be set with the top and bottom color
+	Scene scene(8, glm::vec3(1), glm::vec3(0.5f, 0.7f, 1.0f)); // Sky color could be set with the top and bottom color
 	scene.SetCamera(camera);
 
 	// Create material
@@ -36,19 +36,29 @@ int main(int argc, char* argv[]) {
 		scene.AddObject(std::move(plane));
 	}
 
-	/*
-	// Create objects -> add to scene
-	for(int i = 0; i < 10; i++) {
-		auto material = (rand() % 2 == 0) ? std::dynamic_pointer_cast<Material>(lambertian) : std::dynamic_pointer_cast<Material>(metal);
-		std::unique_ptr<Sphere> sphere = std::make_unique<Sphere>(glm::vec3(random(0, 2), random(0, 2), random(0, 5)), random(0.25f, 1), material);
-		scene.AddObject(std::move(sphere));
-	}
-	*/
-				
-	{
-		auto material = std::make_shared<Lambertian>(color3_t(1, 0, 0));
-		auto triangle = std::make_unique<Triangle>(glm::vec3(-3, 0, 2), glm::vec3(3, 0, 2), glm::vec3(0, 4, 2), material);
-		scene.AddObject(std::move(triangle));
+	for(int x = -10; x < 10; x++) {
+		for(int z = -10; z < 10; z++) {
+			std::shared_ptr<Material> material;
+
+			// Create random material
+			float r = random01();
+			if(r < 0.3f) {
+				material = std::make_shared<Lambertian>(glm::rgbColor(glm::vec3(random(0, 360), 1, 1)));
+			} else if(r < 0.6f) {
+				material = std::make_shared<Metal>(color3_t(random(0.5, 1.0f)), random(0, 0.5f));
+			} else if(r < 0.9f) {
+				material = std::make_shared<Dielectric>(color3_t(1), random(1.1f, 2.0f));
+			} else {
+				material = std::make_shared<Emissive>(glm::rgbColor(glm::vec3(random(0, 360), 1, 1)), 5.0f);
+			}
+
+			// Set random sphere radius
+			float radius = random(0.2f, 0.3f);
+			// Create sphere using random radius and material
+			std::unique_ptr<Sphere> sphere = std::make_unique<Sphere>(glm::vec3(x + random(-0.5f, 0.5f), radius, z + random(-0.5f, 0.5f)), radius, material);
+			// Add sphere to the scene
+			scene.AddObject(std::move(sphere));
+		}
 	}
 	
 	// Render scene
