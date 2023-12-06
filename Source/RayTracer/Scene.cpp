@@ -1,5 +1,8 @@
 #include "Scene.h"
 
+#include <iostream>
+#include <iomanip>
+
 #include "MathUtils.h"
 #include "Random.h"
 #include "Canvas.h"
@@ -36,6 +39,7 @@ void Scene::Render(Canvas& canvas, int numSamples) {
 			color /= numSamples;
 			canvas.DrawPoint(pixel, color4_t(color, 1));
 		}
+		std::cout << std::setprecision(2) << std::setw(5) << (((float) y / canvas.GetSize().y) * 100) << "%\n";
 	}
 }
 
