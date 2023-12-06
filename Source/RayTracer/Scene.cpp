@@ -7,7 +7,7 @@
 #include "Random.h"
 #include "Canvas.h"
 
-void Scene::Render(Canvas& canvas, int numSamples) {
+void Scene::Render(Canvas& canvas, int numSamples, int depth) {
 	// Cast ray for each point (pixel) on the canvas
 	for(int y = 0; y < canvas.GetSize().y; y++) {
 		for(int x = 0; x < canvas.GetSize().x; x++) {
@@ -31,7 +31,7 @@ void Scene::Render(Canvas& canvas, int numSamples) {
 				// Cast ray into scene
 				// Add color value from trace
 				raycastHit_t raycastHit;
-				color += Trace(ray, 0, 100, raycastHit, this->depth);
+				color += Trace(ray, 0, 100, raycastHit, depth);
 			}
 
 			// Draw color to canvas point (pixel)
@@ -50,7 +50,7 @@ color3_t Scene::Trace(const ray_t& ray, float minDistance, float maxDistance, ra
 	// Check if scene objects are hit by ray
 	for(auto& object : this->objects) {
 		// When checking objects don't include objects farther than closest hit (starts at max distance)
-		if(object->Hit(ray, minDistance, maxDistance, raycastHit)) {
+		if(object->Hit(ray, minDistance, closestDistance, raycastHit)) {
 			rayHit = true;
 			// Set closest distance to the raycast hit distance (only hit objects closer than closest distance)
 			closestDistance = raycastHit.distance;
