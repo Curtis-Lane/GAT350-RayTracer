@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 
 	const int width = 400;
 	const int height = 300;
-	const int samples = 50;
+	const int samples = 500;
 	const int depth = 6;
 
 	Renderer renderer;
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 	Canvas canvas = Canvas(width, height, renderer);
 	Scene scene = Scene(glm::vec3(1), glm::vec3(0.5f, 0.7f, 1.0f)); // Sky color could be set with the top and bottom color
 
-	InitSceneCornell(scene, canvas);
+	InitScene01(scene, canvas);
 	
 	// Render scene
 	canvas.Clear(color4_t(0, 0, 0, 1));
@@ -93,6 +93,10 @@ void InitScene01(Scene& scene, const Canvas& canvas) {
 			scene.AddObject(std::move(sphere));
 		}
 	}
+
+	auto mesh = std::make_unique<Mesh>(std::make_unique<Emissive>(color3_t(1), 5.0f));
+	mesh->Load("Models/cube.obj", glm::vec3(0, 2.5f, -2.25f), glm::vec3(45, 45, 0));
+	scene.AddObject(std::move(mesh));
 
 	auto plane = std::make_unique<Plane>(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), std::make_shared<Lambertian>(color3_t(0.2f)));
 	scene.AddObject(std::move(plane));
